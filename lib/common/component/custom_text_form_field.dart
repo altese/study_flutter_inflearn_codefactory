@@ -20,7 +20,8 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const baseBorder = OutlineInputBorder(
-      borderSide: BorderSide(color: INPUT_BORDER_COLOR, width: 1.0),
+      borderSide: BorderSide(color: Colors.white, width: 1.0),
+      borderRadius: BorderRadius.all(Radius.circular(15)),
     );
 
     return TextFormField(
@@ -34,13 +35,15 @@ class CustomTextFormField extends StatelessWidget {
             const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         hintText: hintText,
         errorText: errorText,
-        hintStyle: const TextStyle(color: BODY_TEXT_COLOR, fontSize: 14.0),
+        hintStyle:
+            const TextStyle(color: PLACEHOLDER_TEXT_COLOR, fontSize: 14.0),
         fillColor: INPUT_BG_COLOR,
         filled: true,
 
         // inputBorder는 여러 가지의 상태가 있다.
-        // 선택된 상태, 선택되지 안은 상태, 활성화, 비활성화
-        border: baseBorder, // 모든 Input 상태의 기본 스타일 세팅
+        // 선택된 상태, 선택되지 않은 상태, 활성화, 비활성화
+        border: baseBorder, // 활성화(텍스트 입력을 막아두지 않은 것)되지 않았을 때의 스타일
+        enabledBorder: baseBorder, // 활성화되었을 때의 스타일
         focusedBorder: baseBorder.copyWith(
           borderSide: baseBorder.borderSide.copyWith(color: PRIMARY_COLOR),
         ), // 선택한 상태일 때의 border 스타일
