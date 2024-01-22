@@ -6,9 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:inflearn_code_factory/common/component/custom_text_form_field.dart';
 import 'package:inflearn_code_factory/common/const/colors.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
+import 'package:inflearn_code_factory/common/view/root_tab.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String userName = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +62,17 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         CustomTextFormField(
                           hintText: '이메일을 입력해 주세요.',
-                          onChanged: (String value) {},
+                          onChanged: (String value) {
+                            userName = value;
+                          },
                         ),
                         const SizedBox(height: 10),
                         CustomTextFormField(
                           hintText: '비밀번호를 입력해 주세요.',
-                          onChanged: (String value) {},
+                          obscureText: true,
+                          onChanged: (String value) {
+                            password = value;
+                          },
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
@@ -76,7 +90,8 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () async {
                               // refresh token, access token을 받아오기
                               // ID:비밀번호
-                              const rawString = 'test@codefactory.ai:testtest';
+                              // test@codefactory.ai:testtest
+                              final rawString = '$userName:$password';
 
                               // Base64로 인코딩하는 코드
                               Codec<String, String> stringToBase64 =
@@ -87,6 +102,12 @@ class LoginScreen extends StatelessWidget {
                                 'http://$ip/auth/login',
                                 options: Options(
                                   headers: {'authorization': 'Basic $token'},
+                                ),
+                              );
+
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const RootTab(),
                                 ),
                               );
 
