@@ -20,15 +20,18 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const baseBorder = OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white, width: 1.0),
+      borderSide: BorderSide(color: Colors.white, width: 1.5),
       borderRadius: BorderRadius.all(Radius.circular(15)),
     );
 
     return TextFormField(
-      cursorColor: PRIMARY_COLOR,
-      obscureText: obscureText, // 비밀번호 입력 때만 사용
-      autofocus: autofocus, // 자동으로 포커즈됨
-      onChanged: onChanged, // 값이 바뀔 때 실행되는 콜백
+      cursorColor: POINT_COLOR_PURPLE,
+      // 비밀번호 입력 때만 사용
+      obscureText: obscureText,
+      // 자동으로 포커즈됨
+      autofocus: autofocus,
+      // 값이 바뀔 때 실행되는 콜백
+      onChanged: onChanged,
       decoration: InputDecoration(
         // 텍스트 필드 안의 패딩
         contentPadding:
@@ -40,13 +43,18 @@ class CustomTextFormField extends StatelessWidget {
         fillColor: INPUT_BG_COLOR,
         filled: true,
 
-        // inputBorder는 여러 가지의 상태가 있다.
-        // 선택된 상태, 선택되지 않은 상태, 활성화, 비활성화
-        border: baseBorder, // 활성화(텍스트 입력을 막아두지 않은 것)되지 않았을 때의 스타일
-        enabledBorder: baseBorder, // 활성화되었을 때의 스타일
+        /* 
+          inputBorder는 여러 가지의 상태가 있다.
+          선택된 상태, 선택되지 않은 상태, 활성화, 비활성화
+        */
+        // 활성화(텍스트 입력을 막아두지 않은 것)되지 않았을 때의 스타일
+        border: baseBorder,
+        // 활성화되었을 때의 스타일
+        enabledBorder: baseBorder,
+        // 선택한 상태일 때의 border 스타일
         focusedBorder: baseBorder.copyWith(
-          borderSide: baseBorder.borderSide.copyWith(color: PRIMARY_COLOR),
-        ), // 선택한 상태일 때의 border 스타일
+          borderSide: baseBorder.borderSide.copyWith(color: POINT_COLOR_PURPLE),
+        ),
       ),
     );
   }

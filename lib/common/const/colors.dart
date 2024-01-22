@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 // 주 색상
 const PRIMARY_COLOR = Color.fromARGB(255, 57, 168, 164);
-const POINT_COLOR = Color(0xFFfddd42);
+const POINT_COLOR_YELLOW = Color(0xFFfddd42);
+const POINT_COLOR_PURPLE = Color.fromARGB(255, 203, 114, 255);
+
 // 글씨 색상
 const BODY_TEXT_COLOR = Color.fromARGB(255, 61, 64, 61);
 // 플레이스 홀더 색상

@@ -10,18 +10,20 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultLayout(
       backgroundColor: const Color(0xFFd5f3ef),
-      // 키보드가 올라올 때 오류 나지 않도록 스크롤 설정
+      // 키보드가 올라올 때 오류 나지 않도록 SingleChildScrollView로 감싼다.
       child: LayoutBuilder(
         builder: (context, constraint) => SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: ConstrainedBox(
+            // 위젯들 정렬을 위해 constraints
             constraints: BoxConstraints(minHeight: constraint.maxHeight),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,13 +33,10 @@ class LoginScreen extends StatelessWidget {
                         _SubTitle(),
                       ],
                     ),
-                    Image.network(
-                        'http://sanriokorea.co.kr/wp-content/themes/sanrio/images/pochacco.png'),
-
-                    // Image.asset(
-                    //   'asset/img/misc/logo.png',
-                    //   width: MediaQuery.of(context).size.width / 3 * 2,
-                    // ),
+                    Image.asset(
+                      'asset/img/misc/pochacco.png',
+                      width: MediaQuery.of(context).size.width / 3 * 2,
+                    ),
                     Column(
                       children: [
                         CustomTextFormField(
@@ -54,7 +53,7 @@ class LoginScreen extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: POINT_COLOR,
+                              backgroundColor: POINT_COLOR_YELLOW,
                               elevation: 0.5,
                               padding: const EdgeInsets.symmetric(vertical: 13),
                               shape: const RoundedRectangleBorder(
@@ -65,7 +64,10 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () {},
                             child: const Text(
                               '로그인',
-                              style: TextStyle(color: BODY_TEXT_COLOR),
+                              style: TextStyle(
+                                color: BODY_TEXT_COLOR,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
@@ -74,7 +76,13 @@ class LoginScreen extends StatelessWidget {
                           style: TextButton.styleFrom(
                               foregroundColor: PRIMARY_COLOR),
                           onPressed: () {},
-                          child: const Text('회원가입'),
+                          child: const Text(
+                            '회원가입',
+                            style: TextStyle(
+                              color: PRIMARY_COLOR,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -96,7 +104,7 @@ class _Title extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       'POCHACCO',
-      style: TextStyle(fontSize: 36, fontWeight: FontWeight.w600),
+      style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
     );
   }
 }
