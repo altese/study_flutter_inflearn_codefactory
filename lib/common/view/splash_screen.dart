@@ -61,6 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return DefaultLayout(
       backgroundColor: POINT_COLOR_PURPLE,
+      title: null,
       child: SizedBox(
         width: size.width, // 가운데 정렬을 위해
         child: Column(

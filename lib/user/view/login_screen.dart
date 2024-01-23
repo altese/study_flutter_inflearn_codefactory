@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:inflearn_code_factory/common/component/custom_text_form_field.dart';
 import 'package:inflearn_code_factory/common/const/colors.dart';
 import 'package:inflearn_code_factory/common/const/data.dart';
@@ -33,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return DefaultLayout(
       backgroundColor: const Color(0xFFd5f3ef),
+      title: null,
       // 키보드가 올라올 때 오류 나지 않도록 SingleChildScrollView로 감싼다.
       child: LayoutBuilder(
         builder: (context, constraint) => SingleChildScrollView(

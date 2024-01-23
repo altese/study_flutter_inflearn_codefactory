@@ -6,6 +6,7 @@ const POINT_COLOR_YELLOW = Color(0xFFfddd42);
 const POINT_COLOR_PURPLE = Color.fromARGB(255, 203, 114, 255);
 
 const BG_COLOR_PURPLE = Color.fromARGB(255, 236, 203, 255);
+const BG_COLOR_GREEN = Color(0xFFd5f3ef);
 
 // 글씨 색상
 const BODY_TEXT_COLOR = Color.fromARGB(255, 61, 64, 61);

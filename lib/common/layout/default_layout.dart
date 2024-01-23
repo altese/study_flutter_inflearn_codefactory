@@ -9,11 +9,15 @@ import 'package:flutter/material.dart';
 class DefaultLayout extends StatefulWidget {
   final Widget child;
   final Color? backgroundColor;
+  final String? title;
+  final Widget? bottomNavigationBar;
 
   const DefaultLayout({
     super.key,
     required this.child,
     this.backgroundColor = Colors.white,
+    this.title,
+    this.bottomNavigationBar,
   });
 
   @override
@@ -25,7 +29,22 @@ class _DefaultLayoutState extends State<DefaultLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: widget.backgroundColor,
+      appBar: renderAppBar(widget.title),
       body: widget.child,
+      bottomNavigationBar: widget.bottomNavigationBar,
     );
+  }
+
+  AppBar? renderAppBar(String? title) {
+    // title이 없으면 앱바도 없도록
+    if (title == null) {
+      return null;
+    } else {
+      return AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(title),
+      );
+    }
   }
 }
