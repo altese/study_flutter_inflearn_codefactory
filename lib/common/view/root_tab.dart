@@ -9,8 +9,32 @@ class RootTab extends StatefulWidget {
   State<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab> {
+// vsync: this를 위해 Mixin
+class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   int index = 0;
+  late TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 4, vsync: this);
+
+    // 탭바 컨트롤러에 변화가 있을 때마다 함수 실행
+    // 탭바 인덱스 바꾸기
+    tabController.addListener(tabListener);
+  }
+
+  @override
+  void dispose() {
+    tabController.removeListener(tabListener);
+    super.dispose();
+  }
+
+  void tabListener() {
+    setState(() {
+      index = tabController.index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +47,9 @@ class _RootTabState extends State<RootTab> {
         // shifted로 선택 시 선택된 탭바 item이 커지고 나머지가 옆으로 밀림, 글자도 사라짐
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
-          setState(() {
-            this.index = index;
-          });
+          // tabController와 bottomNavigationBar 연결
+          // 탭바뷰 이동
+          tabController.animateTo(index);
         },
         currentIndex: index,
         items: const [
@@ -35,6 +59,10 @@ class _RootTabState extends State<RootTab> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.fastfood_outlined),
+            label: '음식',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt_long_outlined),
             label: '주문',
           ),
           BottomNavigationBarItem(
@@ -43,8 +71,16 @@ class _RootTabState extends State<RootTab> {
           ),
         ],
       ),
-      child: const Center(
-        child: Text('root tab'),
+      child: TabBarView(
+        // 좌우 스크롤 시 화면 전환이 되지 않도록
+        physics: const NeverScrollableScrollPhysics(),
+        controller: tabController,
+        children: const [
+          Center(child: Text('홈')),
+          Center(child: Text('음식')),
+          Center(child: Text('주문')),
+          Center(child: Text('프로필')),
+        ],
       ),
     );
   }
