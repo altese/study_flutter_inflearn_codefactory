@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inflearn_code_factory/user/view/login_screen.dart';
+import 'package:inflearn_code_factory/common/view/splash_screen.dart';
 
 void main() {
   runApp(const _App());
@@ -14,7 +14,7 @@ class _App extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'Pretendard', useMaterial3: true),
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:inflearn_code_factory/common/component/custom_text_form_field.dart';
 import 'package:inflearn_code_factory/common/const/colors.dart';
+import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
 import 'package:inflearn_code_factory/common/view/root_tab.dart';
 
@@ -104,6 +106,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   headers: {'authorization': 'Basic $token'},
                                 ),
                               );
+
+                              final refreshToken =
+                                  response.data['refreshToken'];
+                              final accessToken = response.data['accessToken'];
+
+                              await storage.write(
+                                  key: REFRESH_TOKEN_KEY, value: refreshToken);
+                              await storage.write(
+                                  key: ACCESS_TOKEN_KEY, value: accessToken);
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(
