@@ -24,11 +24,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final Dio dio = Dio();
 
-    // localhost
-    const emulatorIp = '10.0.2.2:3000';
-    const simulatorIp = '127.0.0.1:3000';
+    // // localhost
+    // const emulatorIp = '10.0.2.2:3000';
+    // const simulatorIp = '127.0.0.1:3000';
 
-    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+    // final ip = Platform.isIOS ? simulatorIp : emulatorIp;
 
     return DefaultLayout(
       backgroundColor: const Color(0xFFd5f3ef),
@@ -140,17 +140,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               foregroundColor: PRIMARY_COLOR),
                           onPressed: () async {
                             // token refresh 하기
-                            final response = await dio.post(
-                              'http://$ip/auth/token',
-                              options: Options(
-                                headers: {
-                                  'authorization':
-                                      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcwNTkyOTcyNywiZXhwIjoxNzA2MDE2MTI3fQ.SP2KACrpYgVB-jgtdOYxkOiyAYdRfuh_tVHJAcRhF7k'
-                                },
-                              ),
-                            );
+                            // final response = await dio.post(
+                            //   'http://$ip/auth/token',
+                            //   options: Options(
+                            //     headers: {
+                            //       'authorization':
+                            //           'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcwNTkyOTcyNywiZXhwIjoxNzA2MDE2MTI3fQ.SP2KACrpYgVB-jgtdOYxkOiyAYdRfuh_tVHJAcRhF7k'
+                            //     },
+                            //   ),
+                            // );
 
-                            print(response.data);
+                            // print(response.data);
                           },
                           child: const Text(
                             '회원가입',

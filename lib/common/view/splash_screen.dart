@@ -5,6 +5,7 @@
   - 이 어플에선 토큰을 확인하는 용도 
 */
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:inflearn_code_factory/common/const/colors.dart';
 import 'package:inflearn_code_factory/common/const/data.dart';
@@ -36,23 +37,53 @@ class _SplashScreenState extends State<SplashScreen> {
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    // 토큰이 없으면 로그인 스크린
-    if (refreshToken == null || accessToken == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
+    final Dio dio = Dio();
+
+    try {
+      // token refresh 하기
+      // refreshToken이 만료되지 않았으면 RootTab 이동
+      final response = await dio.post(
+        'http://$ip/auth/token',
+        options: Options(
+          headers: {'authorization': 'Bearer $refreshToken'},
         ),
-        (route) => false,
       );
-    } else {
-      // 토큰이 있으면 루트 탭
+
+      print(response);
+
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => const RootTab(),
         ),
         (route) => false,
       );
+    } catch (e) {
+      // refreshToken이 만료되었으면 LoginScreen 이동
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => const LoginScreen(),
+        ),
+        (route) => false,
+      );
     }
+
+    // // 토큰이 없으면 로그인 스크린
+    // if (refreshToken == null || accessToken == null) {
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //       builder: (_) => const LoginScreen(),
+    //     ),
+    //     (route) => false,
+    //   );
+    // } else {
+    //   // 토큰이 있으면 루트 탭
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //       builder: (_) => const RootTab(),
+    //     ),
+    //     (route) => false,
+    //   );
+    // }
   }
 
   @override
