@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final Dio dio = Dio();
 
     try {
-      // token refresh 하기
+      // accessToken refresh 하기
       // refreshToken이 만료되지 않았으면 RootTab 이동
       final response = await dio.post(
         'http://$ip/auth/token',
@@ -48,6 +48,9 @@ class _SplashScreenState extends State<SplashScreen> {
           headers: {'authorization': 'Bearer $refreshToken'},
         ),
       );
+
+      await storage.write(
+          key: ACCESS_TOKEN_KEY, value: response.data['accessToken']);
 
       print(response);
 
