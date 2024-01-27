@@ -61,6 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
         (route) => false,
       );
     } catch (e) {
+      print('error');
       // refreshToken이 만료되었으면 LoginScreen 이동
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
