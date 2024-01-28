@@ -34,34 +34,38 @@ class RestaurantScreen extends StatelessWidget {
               return ListView.separated(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (_, index) {
-                  final item = snapshot.data![index];
+                  final Map<String, dynamic> item = snapshot.data![index];
 
-                  // item을 class로 parsing
-                  final parsedItem = RestaurantModel(
-                    id: item['id'],
-                    name: item['name'],
-                    thumbUrl: item['thumbUrl'],
-                    tags: List<String>.from(item['tags']),
-                    priceRange: RestaurantPriceRange.values.firstWhere(
-                      (element) => element.name == item['priceRange'],
-                    ),
-                    ratings: item['ratings'],
-                    ratingsCount: item['ratingsCount'],
-                    deliveryTime: item['deliveryTime'],
-                    deliveryFee: item['deliveryFee'],
-                  );
+                  // 기본 Constructor를 사용해 item을 class로 parsing
+                  // final parsedItem = RestaurantModel(
+                  //   id: item['id'],
+                  //   name: item['name'],
+                  //   thumbUrl: item['thumbUrl'],
+                  //   tags: List<String>.from(item['tags']),
+                  //   priceRange: RestaurantPriceRange.values.firstWhere(
+                  //     (element) => element.name == item['priceRange'],
+                  //   ),
+                  //   ratings: item['ratings'],
+                  //   ratingsCount: item['ratingsCount'],
+                  //   deliveryTime: item['deliveryTime'],
+                  //   deliveryFee: item['deliveryFee'],
+                  // );
+
+                  // 개선: factory Constructor를 사용해 parsing
+                  final parsedItem2 = RestaurantModel.fromJson(json: item);
+
                   return RestaurantCard(
                     image: Image.network(
-                      'http://$ip${parsedItem.thumbUrl}',
+                      'http://$ip${parsedItem2.thumbUrl}',
                       fit: BoxFit.cover,
                     ),
-                    name: parsedItem.name,
+                    name: parsedItem2.name,
                     // List<String> -> List<dynamic>
-                    tags: parsedItem.tags,
-                    ratingsCount: parsedItem.ratingsCount,
-                    deliveryTime: parsedItem.deliveryTime,
-                    deliveryFee: parsedItem.deliveryTime,
-                    ratings: parsedItem.ratings,
+                    tags: parsedItem2.tags,
+                    ratingsCount: parsedItem2.ratingsCount,
+                    deliveryTime: parsedItem2.deliveryTime,
+                    deliveryFee: parsedItem2.deliveryTime,
+                    ratings: parsedItem2.ratings,
                   );
                 },
                 // 아이템 사이에 들어가는 위젯
