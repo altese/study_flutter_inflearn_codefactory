@@ -52,21 +52,10 @@ class RestaurantScreen extends StatelessWidget {
                   // );
 
                   // 개선: factory Constructor를 사용해 parsing
-                  final parsedItem2 = RestaurantModel.fromJson(json: item);
+                  final RestaurantModel parsedItem2 =
+                      RestaurantModel.fromJson(json: item);
 
-                  return RestaurantCard(
-                    image: Image.network(
-                      'http://$ip${parsedItem2.thumbUrl}',
-                      fit: BoxFit.cover,
-                    ),
-                    name: parsedItem2.name,
-                    // List<String> -> List<dynamic>
-                    tags: parsedItem2.tags,
-                    ratingsCount: parsedItem2.ratingsCount,
-                    deliveryTime: parsedItem2.deliveryTime,
-                    deliveryFee: parsedItem2.deliveryTime,
-                    ratings: parsedItem2.ratings,
-                  );
+                  return RestaurantCard.fromModel(restaurantModel: parsedItem2);
                 },
                 // 아이템 사이에 들어가는 위젯
                 separatorBuilder: (_, index) {
