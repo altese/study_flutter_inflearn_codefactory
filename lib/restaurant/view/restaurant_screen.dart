@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
+import 'package:inflearn_code_factory/restaurant/view/restaurant_detail_screen.dart';
 
 class RestaurantScreen extends StatelessWidget {
   const RestaurantScreen({super.key});
@@ -55,7 +56,18 @@ class RestaurantScreen extends StatelessWidget {
                   final RestaurantModel parsedItem2 =
                       RestaurantModel.fromJson(json: item);
 
-                  return RestaurantCard.fromModel(restaurantModel: parsedItem2);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => RestaurantDetailScreen(
+                            id: parsedItem2.id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: RestaurantCard.fromModel(model: parsedItem2),
+                  );
                 },
                 // 아이템 사이에 들어가는 위젯
                 separatorBuilder: (_, index) {
