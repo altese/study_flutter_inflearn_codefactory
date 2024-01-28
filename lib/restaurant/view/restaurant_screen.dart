@@ -54,7 +54,7 @@ class RestaurantScreen extends StatelessWidget {
 
                   // 개선: factory Constructor를 사용해 parsing
                   final RestaurantModel parsedItem2 =
-                      RestaurantModel.fromJson(json: item);
+                      RestaurantModel.fromJson(item);
 
                   return GestureDetector(
                     onTap: () {
