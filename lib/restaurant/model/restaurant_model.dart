@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'restaurant_model.g.dart';
@@ -11,10 +10,6 @@ enum RestaurantPriceRange { expensive, medium, cheap }
 class RestaurantModel {
   final String id;
   final String name;
-
-  @JsonKey(
-    fromJson: pathToUrl,
-  )
   final String thumbUrl;
   final List<String> tags;
   final RestaurantPriceRange priceRange;
@@ -42,11 +37,6 @@ class RestaurantModel {
   // RestaurantModel -> json 변환
   // this: 현재 클래스
   Map<String, dynamic> toJson() => _$RestaurantModelToJson(this);
-
-  // static 필수
-  static pathToUrl(String value) {
-    return 'http://$ip$value';
-  }
 
   // json으로부터 데이터를 가져와서 인스턴스를 만들어냄
   // factory RestaurantModel.fromJson({

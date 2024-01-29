@@ -1,7 +1,11 @@
-import 'package:inflearn_code_factory/common/const/data.dart';
+import 'package:inflearn_code_factory/common/utils/data_utils.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'restaurant_detail_model.g.dart';
 
 // RestaurantDetailModel은 RestaurantModel에서 필드 몇 개가 추가되었을 뿐이므로 상속을 이용한다.
+@JsonSerializable()
 class RestaurantDetailModel extends RestaurantModel {
   final String detail;
   final List<RestaurantProductModel> products;
@@ -20,35 +24,45 @@ class RestaurantDetailModel extends RestaurantModel {
     required this.products,
   });
 
-  factory RestaurantDetailModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return RestaurantDetailModel(
-      id: json['id'],
-      name: json['name'],
-      thumbUrl: json['thumbUrl'],
-      tags: List<String>.from(json['tags']),
-      priceRange: RestaurantPriceRange.values.firstWhere(
-        (element) => element.name == json['priceRange'],
-      ),
-      ratings: json['ratings'],
-      ratingsCount: json['ratingsCount'],
-      deliveryTime: json['deliveryTime'],
-      deliveryFee: json['deliveryFee'],
-      detail: json['detail'],
-      // *** List<Map<String, dynamic>> 값을 List<RestaurantProductModel>로 변환
-      products: json['products']
-          .map<RestaurantProductModel>((x) => RestaurantProductModel.fromJson(
-                json: x,
-              ))
-          .toList(),
-    );
-  }
-}
+  factory RestaurantDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantDetailModelFromJson(json);
 
+  @override
+  Map<String, dynamic> toJson() => _$RestaurantDetailModelToJson(this);
+}
+//   factory RestaurantDetailModel.fromJson({
+//     required Map<String, dynamic> json,
+//   }) {
+//     return RestaurantDetailModel(
+//       id: json['id'],
+//       name: json['name'],
+//       thumbUrl: json['thumbUrl'],
+//       tags: List<String>.from(json['tags']),
+//       priceRange: RestaurantPriceRange.values.firstWhere(
+//         (element) => element.name == json['priceRange'],
+//       ),
+//       ratings: json['ratings'],
+//       ratingsCount: json['ratingsCount'],
+//       deliveryTime: json['deliveryTime'],
+//       deliveryFee: json['deliveryFee'],
+//       detail: json['detail'],
+//       // *** List<Map<String, dynamic>> 값을 List<RestaurantProductModel>로 변환
+//       products: json['products']
+//           .map<RestaurantProductModel>((x) => RestaurantProductModel.fromJson(
+//                 json: x,
+//               ))
+//           .toList(),
+//     );
+//   }
+// }
+
+@JsonSerializable()
 class RestaurantProductModel {
   final String id;
   final String name;
+  @JsonKey(
+    fromJson: DataUtils.pathToUrl,
+  )
   final String imgUrl;
   final String detail;
   final int price;
@@ -61,15 +75,18 @@ class RestaurantProductModel {
     required this.price,
   });
 
-  factory RestaurantProductModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return RestaurantProductModel(
-      id: json['id'],
-      name: json['name'],
-      imgUrl: 'http://$ip${json['imgUrl']}',
-      detail: json['detail'],
-      price: json['price'],
-    );
-  }
+  factory RestaurantProductModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantProductModelFromJson(json);
+
+  // factory RestaurantProductModel.fromJson({
+  //   required Map<String, dynamic> json,
+  // }) {
+  //   return RestaurantProductModel(
+  //     id: json['id'],
+  //     name: json['name'],
+  //     imgUrl: 'http://$ip${json['imgUrl']}',
+  //     detail: json['detail'],
+  //     price: json['price'],
+  //   );
+  // }
 }
