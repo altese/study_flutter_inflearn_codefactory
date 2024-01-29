@@ -5,44 +5,57 @@ import 'package:inflearn_code_factory/common/layout/default_layout.dart';
 import 'package:inflearn_code_factory/product/component/product_card.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.dart';
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
+import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
 
 class RestaurantDetailScreen extends StatelessWidget {
   final String id;
 
   const RestaurantDetailScreen({super.key, required this.id});
 
-  Future<Map<String, dynamic>> getRestaurantDetail() async {
+  // retrofit으로 교체!
+  // Future<Map<String, dynamic>> getRestaurantDetail() async {
+  Future<RestaurantDetailModel> getRestaurantDetail() async {
     final dio = Dio();
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
+    /* retrofit으로 교체 
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final response = await dio.get(
       'http://$ip/restaurant/$id',
       options: Options(
         headers: {'authorization': 'Bearer $accessToken'},
       ),
     );
-
     return response.data;
+    */
+
+    // retrofit
+    final repository =
+        RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant');
+    return repository.getRestaurantDetail(id: id);
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '떡볶이',
-      child: FutureBuilder<Map<String, dynamic>>(
+      child: FutureBuilder<RestaurantDetailModel>(
         future: getRestaurantDetail(),
-        builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final item = RestaurantDetailModel.fromJson(snapshot.data!);
+          // retrofit으로 교체 후 필요 없음
+          // snapshot에서 바로 매핑된 모델이 나오기 때문
+          // final item = RestaurantDetailModel.fromJson(snapshot.data!);
 
           return CustomScrollView(
             slivers: [
-              renderTop(model: item),
+              renderTop(model: snapshot.data!),
+              // renderTop(model: item),
               renderLabel(),
-              renderProducts(products: item.products),
+              // renderProducts(products: item.products),
+              renderProducts(products: snapshot.data!.products),
             ],
           );
         },
