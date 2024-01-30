@@ -4,24 +4,29 @@ import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/common/dio/dio.dart';
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
+import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
 import 'package:inflearn_code_factory/restaurant/view/restaurant_detail_screen.dart';
 
 class RestaurantScreen extends StatelessWidget {
   const RestaurantScreen({super.key});
 
-  Future<List> paginateRestaurant() async {
+  Future<List<RestaurantModel>> paginateRestaurant() async {
     final dio = Dio();
 
     dio.interceptors.add(CustomInterceptor(storage: storage));
 
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    final response =
+        await RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant')
+            .paginate();
 
-    final response = await dio.get(
-      'http://$ip/restaurant',
-      options: Options(headers: {'authorization': 'Bearer $accessToken'}),
-    );
+    // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    return response.data['data'];
+    // final response = await dio.get(
+    //   'http://$ip/restaurant',
+    //   options: Options(headers: {'authorization': 'Bearer $accessToken'}),
+    // );
+
+    return response.data;
   }
 
   @override
@@ -29,16 +34,16 @@ class RestaurantScreen extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: FutureBuilder<List>(
+        child: FutureBuilder<List<RestaurantModel>>(
           future: paginateRestaurant(),
-          builder: (context, snapshot) {
+          builder: (context, AsyncSnapshot<List<RestaurantModel>> snapshot) {
             if (snapshot.hasData) {
               print(snapshot.data);
 
               return ListView.separated(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (_, index) {
-                  final Map<String, dynamic> item = snapshot.data![index];
+                  final parsedItem2 = snapshot.data![index];
 
                   // 기본 Constructor를 사용해 item을 class로 parsing
                   // final parsedItem = RestaurantModel(
@@ -56,8 +61,8 @@ class RestaurantScreen extends StatelessWidget {
                   // );
 
                   // 개선: factory Constructor를 사용해 parsing
-                  final RestaurantModel parsedItem2 =
-                      RestaurantModel.fromJson(item);
+                  // final RestaurantModel parsedItem2 =
+                  //     RestaurantModel.fromJson(item);
 
                   return GestureDetector(
                     onTap: () {
