@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart' hide Headers;
+import 'package:inflearn_code_factory/product/model/cursor_pagination_model.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.dart';
+import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'restaurant_repository.g.dart';
@@ -9,8 +11,11 @@ abstract class RestaurantRepository {
   factory RestaurantRepository(Dio dio, {String baseUrl}) =
       _RestaurantRepository;
 
-  // @GET('/')
-  // paginate();
+  @GET('/')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<CursorPaginationModel<RestaurantModel>> paginate();
 
   @GET('/{id}')
   @Headers({
