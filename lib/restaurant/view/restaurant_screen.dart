@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/common/dio/dio.dart';
+import 'package:inflearn_code_factory/product/model/cursor_pagination_model.dart';
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
 import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
@@ -11,38 +12,22 @@ import 'package:inflearn_code_factory/restaurant/view/restaurant_detail_screen.d
 class RestaurantScreen extends ConsumerWidget {
   const RestaurantScreen({super.key});
 
-  Future<List<RestaurantModel>> paginateRestaurant(WidgetRef ref) async {
-    final dio = ref.watch(dioProvider);
-
-    final response =
-        await RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant')
-            .paginate();
-
-    // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-
-    // final response = await dio.get(
-    //   'http://$ip/restaurant',
-    //   options: Options(headers: {'authorization': 'Bearer $accessToken'}),
-    // );
-
-    return response.data;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: FutureBuilder<List<RestaurantModel>>(
-          future: paginateRestaurant(ref),
-          builder: (context, AsyncSnapshot<List<RestaurantModel>> snapshot) {
+        child: FutureBuilder<CursorPaginationModel<RestaurantModel>>(
+          future: ref.watch(restaurantRepositoryProvider).paginate(),
+          builder: (context,
+              AsyncSnapshot<CursorPaginationModel<RestaurantModel>> snapshot) {
             if (snapshot.hasData) {
               print(snapshot.data);
 
               return ListView.separated(
-                itemCount: snapshot.data!.length,
+                itemCount: snapshot.data!.data.length,
                 itemBuilder: (_, index) {
-                  final parsedItem2 = snapshot.data![index];
+                  final parsedItem2 = snapshot.data!.data[index];
 
                   // 기본 Constructor를 사용해 item을 class로 parsing
                   // final parsedItem = RestaurantModel(
