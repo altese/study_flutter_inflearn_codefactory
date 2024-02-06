@@ -3,20 +3,22 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/component/custom_text_form_field.dart';
 import 'package:inflearn_code_factory/common/const/colors.dart';
 import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
+import 'package:inflearn_code_factory/common/secure_storage/secure_storage.dart';
 import 'package:inflearn_code_factory/common/view/root_tab.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   String userName = '';
   String password = '';
 
@@ -106,6 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   headers: {'authorization': 'Basic $token'},
                                 ),
                               );
+
+                              final storage = ref.read(secureStorageProvider);
 
                               final refreshToken =
                                   response.data['refreshToken'];

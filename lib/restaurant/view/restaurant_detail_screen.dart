@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/common/dio/dio.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
@@ -8,17 +9,15 @@ import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.d
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
 import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
 
-class RestaurantDetailScreen extends StatelessWidget {
+class RestaurantDetailScreen extends ConsumerWidget {
   final String id;
 
   const RestaurantDetailScreen({super.key, required this.id});
 
   // retrofit으로 교체!
   // Future<Map<String, dynamic>> getRestaurantDetail() async {
-  Future<RestaurantDetailModel> getRestaurantDetail() async {
-    final dio = Dio();
-
-    dio.interceptors.add(CustomInterceptor(storage: storage));
+  Future<RestaurantDetailModel> getRestaurantDetail(WidgetRef ref) async {
+    final dio = ref.watch(dioProvider);
 
     /* retrofit으로 교체 
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
@@ -38,11 +37,11 @@ class RestaurantDetailScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       title: '떡볶이',
       child: FutureBuilder<RestaurantDetailModel>(
-        future: getRestaurantDetail(),
+        future: getRestaurantDetail(ref),
         builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());

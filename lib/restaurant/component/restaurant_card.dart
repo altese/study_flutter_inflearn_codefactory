@@ -62,61 +62,65 @@ class RestaurantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // isDetail이면 그냥 이미지, Detail이 아니면 둥근 이미지
-        if (isDetail) image,
-        if (!isDetail)
-          // ClipRRect: 이미지 테두리 둥글게 하기 위함
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: image,
-          ),
-        const SizedBox(height: 15),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: isDetail ? 15 : 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                name,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                // join: 배열을 문자열로 합치기
-                tags.join(' ∙ '),
-
-                style: const TextStyle(
-                    color: BODY_TEXT_COLOR, fontWeight: FontWeight.w300),
-              ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  _IconText(icon: Icons.star, label: ratings.toString()),
-                  renderDot(),
-                  _IconText(
-                      icon: Icons.receipt, label: ratingsCount.toString()),
-                  renderDot(),
-                  _IconText(
-                      icon: Icons.timelapse_outlined, label: '$deliveryTime 분'),
-                  renderDot(),
-                  _IconText(
-                    icon: Icons.monetization_on,
-                    label: deliveryFee == 0 ? '무료' : deliveryFee.toString(),
-                  ),
-                ],
-              ),
-              if (detail != null && isDetail)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Text(detail!),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Column(
+        children: [
+          // isDetail이면 그냥 이미지, Detail이 아니면 둥근 이미지
+          if (isDetail) image,
+          if (!isDetail)
+            // ClipRRect: 이미지 테두리 둥글게 하기 위함
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: image,
+            ),
+          const SizedBox(height: 15),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: isDetail ? 15 : 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500),
                 ),
-            ],
+                const SizedBox(height: 5),
+                Text(
+                  // join: 배열을 문자열로 합치기
+                  tags.join(' ∙ '),
+
+                  style: const TextStyle(
+                      color: BODY_TEXT_COLOR, fontWeight: FontWeight.w300),
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    _IconText(icon: Icons.star, label: ratings.toString()),
+                    renderDot(),
+                    _IconText(
+                        icon: Icons.receipt, label: ratingsCount.toString()),
+                    renderDot(),
+                    _IconText(
+                        icon: Icons.timelapse_outlined,
+                        label: '$deliveryTime 분'),
+                    renderDot(),
+                    _IconText(
+                      icon: Icons.monetization_on,
+                      label: deliveryFee == 0 ? '무료' : deliveryFee.toString(),
+                    ),
+                  ],
+                ),
+                if (detail != null && isDetail)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Text(detail!),
+                  ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
