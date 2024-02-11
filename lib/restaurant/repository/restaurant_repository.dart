@@ -26,18 +26,14 @@ abstract class RestaurantRepository {
       _RestaurantRepository;
 
   @GET('/')
-  @Headers({
-    'accessToken': 'true',
-  })
+  @Headers({'accessToken': 'true'})
   Future<CursorPaginationModel<RestaurantModel>> paginate({
     // 파라미터 설정
     @Queries() PaginationParams? paginationParams = const PaginationParams(),
   });
 
   @GET('/{id}')
-  @Headers({
-    'accessToken': 'true',
-  })
+  @Headers({'accessToken': 'true'})
   Future<RestaurantDetailModel> getRestaurantDetail({
     @Path('id') required String id,
   });
