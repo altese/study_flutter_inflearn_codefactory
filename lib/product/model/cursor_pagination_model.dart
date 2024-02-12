@@ -53,6 +53,7 @@ class CursorPaginationMeta {
 }
 
 // 새로고침할 때
+// : 기존 데이터 리셋 + 추가 데이터
 // meta, data가 이미 존재한다는 가정 하에 사용하기 때문에 CursorPaginationModel 상속
 // CursorPaginationRefetching도 Base의 서브 클래스
 class CursorPaginationRefetching<T> extends CursorPaginationModel<T> {
@@ -63,6 +64,7 @@ class CursorPaginationRefetching<T> extends CursorPaginationModel<T> {
 }
 
 // 리스트의 맨 아래로 내려서 추가 데이터 요청할 때
+// : 기존 데이터 유지 + 추가 데이터
 class CursorPaginationFetchingMore<T> extends CursorPaginationModel<T> {
   CursorPaginationFetchingMore({
     required super.meta,
