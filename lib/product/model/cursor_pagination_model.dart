@@ -32,6 +32,16 @@ class CursorPaginationModel<T> extends CursorPaginationBase {
     required this.data,
   });
 
+  CursorPaginationModel copyWith({
+    CursorPaginationMeta? meta,
+    List<T>? data,
+  }) {
+    return CursorPaginationModel(
+      meta: meta ?? this.meta,
+      data: data ?? this.data,
+    );
+  }
+
   // T 제네릭이 어떤 타입으로 들어올지 알 수 없기 때문에 외부에서 전환되는 방법을 알려줘야 한다.
   factory CursorPaginationModel.fromJson(
           Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
@@ -47,6 +57,16 @@ class CursorPaginationMeta {
     required this.count,
     required this.hasMore,
   });
+
+  CursorPaginationMeta copyWith({
+    int? count,
+    bool? hasMore,
+  }) {
+    return CursorPaginationMeta(
+      count: count ?? this.count,
+      hasMore: hasMore ?? this.hasMore,
+    );
+  }
 
   factory CursorPaginationMeta.fromJson(Map<String, dynamic> json) =>
       _$CursorPaginationMetaFromJson(json);
