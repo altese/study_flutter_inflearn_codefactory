@@ -1,7 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/product/model/cursor_pagination_model.dart';
 import 'package:inflearn_code_factory/product/model/pagination_params.dart';
+import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
 import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
+
+// for 캐싱
+// - restaurantProvider에 있는 데이터를 디테일 페이지에서도 쓰기 때문에 이미 있는 데이터는 restaurantProvider에서 가져온다.
+final restaurantDetailProvider =
+    Provider.family<RestaurantModel?, String>((ref, id) {
+  final state = ref.watch(restaurantProvider);
+
+  // 데이터가 없으면 null
+  if (state is! CursorPaginationModel<RestaurantModel>) {
+    return null;
+  }
+
+  // 데이터가 있으면 해당 데이터를 찾아서 리턴
+  return state.data.firstWhere((element) => element.id == id);
+});
 
 final restaurantProvider =
     StateNotifierProvider<RestaurantStateNotifier, CursorPaginationBase>(

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
 import 'package:inflearn_code_factory/product/component/product_card.dart';
-import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.dart';
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
-import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
+import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.dart';
+import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
+import 'package:inflearn_code_factory/restaurant/provider/restaurant_provider.dart';
 
 class RestaurantDetailScreen extends ConsumerWidget {
   final String id;
@@ -13,36 +14,29 @@ class RestaurantDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(restaurantDetailProvider(id));
+
+    if (state == null) {
+      return const DefaultLayout(
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return DefaultLayout(
       title: '떡볶이',
-      child: FutureBuilder<RestaurantDetailModel>(
-        future:
-            ref.watch(restaurantRepositoryProvider).getRestaurantDetail(id: id),
-        // future: getRestaurantDetail(ref),
-        builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          // retrofit으로 교체 후 필요 없음
-          // snapshot에서 바로 매핑된 모델이 나오기 때문
-          // final item = RestaurantDetailModel.fromJson(snapshot.data!);
-
-          return CustomScrollView(
-            slivers: [
-              renderTop(model: snapshot.data!),
-              // renderTop(model: item),
-              renderLabel(),
-              // renderProducts(products: item.products),
-              renderProducts(products: snapshot.data!.products),
-            ],
-          );
-        },
+      child: CustomScrollView(
+        slivers: [
+          renderTop(model: state),
+          // renderLabel(),
+          // renderProducts(products: state.products),
+        ],
       ),
     );
   }
 
-  SliverToBoxAdapter renderTop({required RestaurantDetailModel model}) {
+  SliverToBoxAdapter renderTop({
+    required RestaurantModel model,
+  }) {
     // 스크롤이 필요 없는 위젯
     return SliverToBoxAdapter(
       child: RestaurantCard.fromModel(
