@@ -11,7 +11,7 @@ final restaurantDetailProvider =
   final state = ref.watch(restaurantProvider);
 
   // 데이터가 없으면 null
-  if (state is! CursorPaginationModel<RestaurantModel>) {
+  if (state is! CursorPaginationModel) {
     return null;
   }
 
@@ -44,7 +44,7 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     paginate();
   }
 
-  void paginate({
+  Future<void> paginate({
     // 가져올 때 개수
     int fetchCount = 20,
     // true - 데이터 추가로 가져오기
@@ -141,5 +141,33 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     } catch (e) {
       state = CursorPaginationError(message: '데이터를 가져오지 못했습니다.');
     }
+  }
+
+  void getDetail({
+    required String id,
+  }) async {
+    // CursorPaginationModel이 아닐 때 (데이터가 없을 때)
+    // - 데이터를 가져오는 요청
+    if (state is! CursorPaginationModel) {
+      await paginate();
+    }
+
+    // 여전히 CursorPaginationModel이 아닐 때
+    // - 서버에서 오류가 난 경우
+    if (state is! CursorPaginationModel) {
+      return;
+    }
+
+    // CursorPaginationModel일 때
+    final pState = state as CursorPaginationModel;
+
+    final resp = await repository.getRestaurantDetail(id: id);
+
+    // 첫번째 요청일 때 해당 id의 pState.data는 RestaurantModel -> RestaurantDetailModel인 resp로 대체
+    state = pState.copyWith(
+      data: pState.data
+          .map<RestaurantModel>((e) => e.id == id ? resp : e)
+          .toList(),
+    );
   }
 }
