@@ -55,8 +55,19 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ListView.separated(
         controller: controller,
-        itemCount: cp.data.length,
+        itemCount: cp.data.length + 1, // 로딩바 추가하기 위해 + 1
         itemBuilder: (_, index) {
+          if (index == cp.data.length) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Center(
+                child: data is CursorPaginationFetchingMore
+                    ? const CircularProgressIndicator()
+                    : const Text('데이터가 없습니다.'),
+              ),
+            );
+          }
+
           final parsedItem2 = cp.data[index];
 
           return GestureDetector(
