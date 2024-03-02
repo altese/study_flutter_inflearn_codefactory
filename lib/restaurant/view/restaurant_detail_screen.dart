@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
 import 'package:inflearn_code_factory/product/component/product_card.dart';
+import 'package:inflearn_code_factory/rating/component/rating_card.dart';
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
@@ -46,6 +47,18 @@ class _RestaurantDetailScreenState
           if (state is RestaurantDetailModel) renderLabel(),
           if (state is RestaurantDetailModel)
             renderProducts(products: state.products),
+          const SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverToBoxAdapter(
+              child: RatingCard(
+                avatarImage: AssetImage('asset/img/food/pcc-02.png'),
+                images: [],
+                rating: 4,
+                email: 'pocha@gamil.com',
+                content: '맛있어요',
+              ),
+            ),
+          ),
         ],
       ),
     );
