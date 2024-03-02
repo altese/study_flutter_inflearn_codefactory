@@ -59,6 +59,7 @@ dev_dependencies:
   retrofit_generator: '>=7.0.0 <8.0.0'
   riverpod_lint: ^2.3.7
   riverpod_generator: ^2.3.9
+  skeletons: ^0.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
