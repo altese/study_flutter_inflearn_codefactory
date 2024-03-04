@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/common/dio/dio.dart';
+import 'package:inflearn_code_factory/common/repository/base_pagination_repository.dart';
 import 'package:inflearn_code_factory/product/model/cursor_pagination_model.dart';
 import 'package:inflearn_code_factory/product/model/pagination_params.dart';
 import 'package:inflearn_code_factory/rating/model/rating_model.dart';
@@ -11,10 +12,12 @@ part 'restaurant_rating_repository.g.dart';
 
 // http://ip/restaurant/:rid/rating
 @RestApi()
-abstract class RestaurantRatingRepository {
+abstract class RestaurantRatingRepository
+    implements IBasePaginationRepository<RatingModel> {
   factory RestaurantRatingRepository(Dio dio, {String baseUrl}) =
       _RestaurantRatingRepository;
 
+  @override
   @GET('/')
   @Headers({'accessToken': 'true'})
   Future<CursorPaginationModel<RatingModel>> paginate({
