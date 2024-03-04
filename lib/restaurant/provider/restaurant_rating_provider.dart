@@ -1,5 +1,5 @@
-import 'package:inflearn_code_factory/product/model/cursor_pagination_model.dart';
-import 'package:inflearn_code_factory/product/model/pagination_params.dart';
+import 'package:inflearn_code_factory/common/model/cursor_pagination_model.dart';
+import 'package:inflearn_code_factory/common/model/pagination_params.dart';
 import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

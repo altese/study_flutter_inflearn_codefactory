@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:inflearn_code_factory/product/model/cursor_pagination_model.dart';
-import 'package:inflearn_code_factory/product/model/pagination_params.dart';
+import 'package:inflearn_code_factory/common/model/cursor_pagination_model.dart';
+import 'package:inflearn_code_factory/common/model/pagination_params.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
 import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
 
