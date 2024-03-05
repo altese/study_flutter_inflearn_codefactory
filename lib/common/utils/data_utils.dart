@@ -6,7 +6,7 @@ class DataUtils {
   }
 
   // url을 리스트로 받았을 때
-  static List<String> listPathsToUrls(List<String> paths) {
+  static List<String> listPathsToUrls(List paths) {
     return paths.map((e) => pathToUrl(e)).toList();
   }
 }

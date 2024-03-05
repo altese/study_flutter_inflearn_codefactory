@@ -25,7 +25,7 @@ abstract class RestaurantRatingRepository
   });
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 RestaurantRatingRepository restaurantRatingRepository(
   ProviderRef ref, {
   required String id,

@@ -1,4 +1,6 @@
 import 'dart:core';
+
+import 'package:inflearn_code_factory/common/model/model_with_id.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'restaurant_model.g.dart';
@@ -7,7 +9,8 @@ enum RestaurantPriceRange { expensive, medium, cheap }
 
 // fromJson을 자동으로 만들어 주는 어노테이션
 @JsonSerializable()
-class RestaurantModel {
+class RestaurantModel implements IModelWithId {
+  @override
   final String id;
   final String name;
   final String thumbUrl;

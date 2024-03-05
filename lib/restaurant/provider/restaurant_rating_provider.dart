@@ -1,79 +1,19 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/model/cursor_pagination_model.dart';
-import 'package:inflearn_code_factory/common/model/pagination_params.dart';
-import 'package:inflearn_code_factory/restaurant/repository/restaurant_repository.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:inflearn_code_factory/common/provider/pagination_provider.dart';
+import 'package:inflearn_code_factory/rating/model/rating_model.dart';
+import 'package:inflearn_code_factory/restaurant/repository/restaurant_rating_repository.dart';
 
-part 'restaurant_rating_provider.g.dart';
+final restaurantRatingProvider = StateNotifierProvider.family<
+    RestaurantRatingStateNotifier, CursorPaginationBase, String>((ref, id) {
+  final repo = ref.watch(restaurantRatingRepositoryProvider(id: id));
 
-@riverpod
-class RestaurantRatingState extends _$RestaurantRatingState {
-  @override
-  CursorPaginationBase build() {
-    return CursorPaginationLoading();
-  }
+  return RestaurantRatingStateNotifier(repository: repo);
+});
 
-  Future<void> paginate({
-    int fetchCount = 20,
-    bool fetchMore = false,
-    bool forceRefetch = false,
-  }) async {
-    try {
-      if (state is CursorPaginationModel && !forceRefetch) {
-        final pState = state as CursorPaginationModel;
+class RestaurantRatingStateNotifier
+    extends PaginationStateProvider<RatingModel, RestaurantRatingRepository> {
+  RestaurantRatingStateNotifier({required super.repository});
 
-        if (!pState.meta.hasMore) {
-          return;
-        }
-      }
-
-      final isLoading = state is CursorPaginationLoading;
-      final isRefetching = state is CursorPaginationRefetching;
-      final isFetchingMore = state is CursorPaginationFetchingMore;
-
-      if (fetchMore && (isRefetching || isLoading || isFetchingMore)) {
-        return;
-      }
-
-      PaginationParams paginationParams = PaginationParams(
-        count: fetchCount,
-      );
-
-      if (fetchMore) {
-        final pState = (state as CursorPaginationModel);
-
-        state = CursorPaginationFetchingMore(
-          meta: pState.meta,
-          data: pState.data,
-        );
-
-        paginationParams =
-            paginationParams.copyWith(after: pState.data.last.id);
-      } else {
-        if (state is CursorPaginationModel && !forceRefetch) {
-          final pState = state as CursorPaginationModel;
-
-          state = CursorPaginationRefetching(
-            meta: pState.meta,
-            data: pState.data,
-          );
-        } else {
-          state = CursorPaginationLoading();
-        }
-      }
-
-      final resp = await ref
-          .read(restaurantRepositoryProvider)
-          .paginate(paginationParams: paginationParams);
-
-      if (state is CursorPaginationFetchingMore) {
-        final pState = (state as CursorPaginationFetchingMore);
-
-        state = resp.copyWith(data: [...pState.data, ...resp.data]);
-      } else {
-        state = resp;
-      }
-    } catch (e) {
-      state = CursorPaginationError(message: '데이터를 가져오지 못했습니다.');
-    }
-  }
+  // PaginationStateProvider 슈퍼클래스에서 상속받으므로 paginate() 삭제
 }

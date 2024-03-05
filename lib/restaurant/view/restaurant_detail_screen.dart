@@ -7,6 +7,7 @@ import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart'
 import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
 import 'package:inflearn_code_factory/restaurant/provider/restaurant_provider.dart';
+import 'package:inflearn_code_factory/restaurant/provider/restaurant_rating_provider.dart';
 import 'package:skeletons/skeletons.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
@@ -31,6 +32,7 @@ class _RestaurantDetailScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(restaurantDetailProvider(widget.id));
+    final ratingsState = ref.watch(restaurantRatingProvider(widget.id));
 
     if (state == null) {
       return const DefaultLayout(
