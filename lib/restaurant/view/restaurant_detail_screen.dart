@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
+import 'package:inflearn_code_factory/common/model/cursor_pagination_model.dart';
 import 'package:inflearn_code_factory/product/component/product_card.dart';
 import 'package:inflearn_code_factory/rating/component/rating_card.dart';
+import 'package:inflearn_code_factory/rating/model/rating_model.dart';
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.dart';
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
@@ -49,19 +51,26 @@ class _RestaurantDetailScreenState
           if (state is RestaurantDetailModel) renderLabel(),
           if (state is RestaurantDetailModel)
             renderProducts(products: state.products),
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverToBoxAdapter(
-              child: RatingCard(
-                avatarImage: AssetImage('asset/img/food/pcc-02.png'),
-                images: [],
-                rating: 4,
-                email: 'pocha@gamil.com',
-                content: '맛있어요',
-              ),
-            ),
-          ),
+          if (ratingsState is CursorPaginationModel<RatingModel>)
+            renderRatings(models: ratingsState.data),
         ],
+      ),
+    );
+  }
+
+  SliverPadding renderRatings({
+    required List<RatingModel> models,
+  }) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: RatingCard.fromModel(model: models[index]),
+          ),
+          childCount: models.length,
+        ),
       ),
     );
   }

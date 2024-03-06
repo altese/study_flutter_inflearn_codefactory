@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart'; // *** for mapIndexed
 import 'package:flutter/material.dart';
 import 'package:inflearn_code_factory/common/const/colors.dart';
+import 'package:inflearn_code_factory/rating/model/rating_model.dart';
 
 class RatingCard extends StatelessWidget {
   // ImageProvider: NetworkImage, AssetImage 등의 위젯들이 해당함
@@ -18,6 +19,18 @@ class RatingCard extends StatelessWidget {
     required this.email,
     required this.content,
   });
+
+  factory RatingCard.fromModel({
+    required RatingModel model,
+  }) {
+    return RatingCard(
+      avatarImage: NetworkImage(model.user.imageUrl),
+      images: model.imgUrls.map((e) => Image.network(e)).toList(),
+      rating: model.rating,
+      email: model.user.username,
+      content: model.content,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
