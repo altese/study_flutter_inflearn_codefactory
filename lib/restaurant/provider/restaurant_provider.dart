@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/model/cursor_pagination_model.dart';
 import 'package:inflearn_code_factory/common/provider/pagination_provider.dart';
@@ -16,7 +17,9 @@ final restaurantDetailProvider =
   }
 
   // 데이터가 있으면 해당 데이터를 찾아서 리턴
-  return state.data.firstWhere((element) => element.id == id);
+  // firstWhere: 존재하지 않으면 에러를 던짐
+  // firstWhereOrNull: 존재하지 않으면 Null
+  return state.data.firstWhereOrNull((element) => element.id == id);
 });
 
 final restaurantProvider =
@@ -59,11 +62,20 @@ class RestaurantStateNotifier
 
     final resp = await repository.getRestaurantDetail(id: id);
 
-    // 첫번째 요청일 때 해당 id의 pState.data는 RestaurantModel -> RestaurantDetailModel인 resp로 대체
-    state = pState.copyWith(
-      data: pState.data
-          .map<RestaurantModel>((e) => e.id == id ? resp : e)
-          .toList(),
-    );
+    // 데이터가 없을 때: 캐시의 끝에 데이터(resp) 추가
+    // 단점: 추가한 데이터가 홈 탭 밑에도 추가되어서 UI에 노출된다. (데이터 중복이 생길 수 있음)
+    if (pState.data.where((e) => e.id == id).isEmpty) {
+      state = pState.copyWith(
+        data: <RestaurantModel>[...pState.data, resp],
+      );
+    } else {
+      // 이미 존재하는(캐시된) 데이터를 처리할 때
+      // 첫번째 요청일 때 해당 id의 pState.data는 RestaurantModel -> RestaurantDetailModel인 resp로 대체
+      state = pState.copyWith(
+        data: pState.data
+            .map<RestaurantModel>((e) => e.id == id ? resp : e)
+            .toList(),
+      );
+    }
   }
 }
