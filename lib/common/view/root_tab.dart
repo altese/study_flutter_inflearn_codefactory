@@ -3,6 +3,7 @@ import 'package:inflearn_code_factory/common/const/colors.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
 import 'package:inflearn_code_factory/product/view/product_screen.dart';
 import 'package:inflearn_code_factory/restaurant/view/restaurant_screen.dart';
+import 'package:inflearn_code_factory/user/view/profile_screen.dart';
 
 class RootTab extends StatefulWidget {
   static String get routeName => 'home';
@@ -83,7 +84,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
           RestaurantScreen(),
           ProductScreen(),
           Center(child: Text('주문')),
-          Center(child: Text('프로필')),
+          ProfileScreen(),
         ],
       ),
     );

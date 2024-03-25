@@ -1,14 +1,10 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inflearn_code_factory/common/component/custom_text_form_field.dart';
 import 'package:inflearn_code_factory/common/const/colors.dart';
-import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
-import 'package:inflearn_code_factory/common/secure_storage/secure_storage.dart';
-import 'package:inflearn_code_factory/common/view/root_tab.dart';
+import 'package:inflearn_code_factory/user/model/user_model.dart';
+import 'package:inflearn_code_factory/user/provider/user_me_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static String get routeName => 'login';
@@ -25,13 +21,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Dio dio = Dio();
-
-    // // localhost
-    // const emulatorIp = '10.0.2.2:3000';
-    // const simulatorIp = '127.0.0.1:3000';
-
-    // final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+    final state = ref.watch(userMeProvider);
 
     return DefaultLayout(
       backgroundColor: const Color(0xFFd5f3ef),
@@ -92,44 +82,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     BorderRadius.all(Radius.circular(15)),
                               ),
                             ),
-                            onPressed: () async {
-                              // refresh token, access token을 받아오기
-                              // ID:비밀번호
-                              // test@codefactory.ai:testtest
-                              final rawString = '$userName:$password';
-
-                              // Base64로 인코딩하는 코드
-                              Codec<String, String> stringToBase64 =
-                                  utf8.fuse(base64);
-                              String token = stringToBase64.encode(rawString);
-
-                              final response = await dio.post(
-                                'http://$ip/auth/login',
-                                options: Options(
-                                  headers: {'authorization': 'Basic $token'},
-                                ),
-                              );
-
-                              final storage = ref.read(secureStorageProvider);
-
-                              final refreshToken =
-                                  response.data['refreshToken'];
-                              final accessToken = response.data['accessToken'];
-
-                              await storage.write(
-                                  key: REFRESH_TOKEN_KEY, value: refreshToken);
-                              await storage.write(
-                                  key: ACCESS_TOKEN_KEY, value: accessToken);
-
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => const RootTab(),
-                                ),
-                              );
-
-                              // response의 body가 response.data
-                              print(response.data);
-                            },
+                            // 로딩 상태면 버튼 비활성화
+                            onPressed: state is UserModelLoading
+                                ? null
+                                : () async {
+                                    ref.read(userMeProvider.notifier).login(
+                                          username: userName,
+                                          password: password,
+                                        );
+                                  },
                             child: const Text(
                               '로그인',
                               style: TextStyle(
