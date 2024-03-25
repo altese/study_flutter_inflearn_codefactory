@@ -16,6 +16,8 @@ import 'package:inflearn_code_factory/common/view/root_tab.dart';
 import 'package:inflearn_code_factory/user/view/login_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'splash';
+
   const SplashScreen({super.key});
 
   @override
@@ -26,6 +28,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
+    deleteToken();
 
     checkToken();
     // deleteToken();

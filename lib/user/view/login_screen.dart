@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,8 @@ import 'package:inflearn_code_factory/common/secure_storage/secure_storage.dart'
 import 'package:inflearn_code_factory/common/view/root_tab.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'login';
+
   const LoginScreen({super.key});
 
   @override
