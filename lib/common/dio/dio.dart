@@ -1,24 +1,27 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:inflearn_code_factory/common/const/data.dart';
 import 'package:inflearn_code_factory/common/secure_storage/secure_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:inflearn_code_factory/user/provider/auth_provider.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
 
   final storage = ref.read(secureStorageProvider);
 
-  dio.interceptors.add(CustomInterceptor(storage: storage));
+  dio.interceptors.add(CustomInterceptor(storage: storage, ref: ref));
 
   return dio;
 });
 
 class CustomInterceptor extends Interceptor {
   final FlutterSecureStorage storage;
+  final Ref ref;
 
   CustomInterceptor({
     required this.storage,
+    required this.ref,
   });
 
   // 1. 요청을 보낼 때
@@ -68,6 +71,8 @@ class CustomInterceptor extends Interceptor {
     // 401: 액세스 토큰에 문제가 있을 때 토큰을 재발급 -> 재발급한 토큰으로 요청
     print('[ERROR] [${err.requestOptions.method}] ${err.requestOptions.uri}');
 
+    print(err);
+
     // 1. 리프레시 토큰 가져오기
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
 
@@ -114,10 +119,19 @@ class CustomInterceptor extends Interceptor {
 
         return handler.resolve(resp); // 응답 반환
       } catch (e) {
+        // refresh token 에러 -> 로그아웃
+        // CircularDependencyError
+        // userMeProvider의 authRepositoryProvier, userMeRepositoryProvider가 dio를 필요로하고
+        // dio는 userMeProvider를 필요로하는 상황
+        // -> 상위 객체 만들기
+        // ref.read(userMeProvider.notifier).logOut();
+
+        ref.read(authProvider.notifier).logOut();
+
         return handler.reject(err);
       }
     }
 
-    super.onError(err, handler);
+    return handler.reject(err);
   }
 }

@@ -28,7 +28,7 @@ class AuthProvider extends ChangeNotifier {
 
   List<GoRoute> get routes => [
         GoRoute(
-          path: '/restaurant',
+          path: '/',
           name: RootTab.routeName,
           builder: (_, __) => const RootTab(),
           routes: [
@@ -49,37 +49,35 @@ class AuthProvider extends ChangeNotifier {
         GoRoute(
           path: '/login',
           name: LoginScreen.routeName,
-          builder: (_, __) => const SplashScreen(),
+          builder: (_, __) => const LoginScreen(),
         ),
       ];
 
+  void logOut() {
+    // userMeProvider에 의존성 없음
+    ref.read(userMeProvider.notifier).logOut();
+  }
+
   // 앱을 실행하면 토큰 확인 -> 로그인 스크린/홈 스크린
   FutureOr<String?> redirectLogic(BuildContext context, GoRouterState state) {
-    print('redirectLogic');
-
-    print(state.matchedLocation);
-
     final UserModelBase? user = ref.read(userMeProvider);
 
     final login = state.matchedLocation == '/login';
 
     // 유저 정보 없을 때
     if (user == null) {
-      print('user == null');
       return login ? null : '/login';
     }
 
     // 유저 정보 있을 때
     // UserModel
     if (user is UserModel) {
-      print('user is not empty');
       return login || state.matchedLocation == '/splash' ? '/' : null;
     }
 
     // 에러: 토큰이 잘못됐을 때
     // UserModelError
     if (user is UserModelError) {
-      print('error');
       return !login ? '/login' : null;
     }
 
