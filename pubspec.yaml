@@ -20,6 +20,7 @@ dependencies:
   logger: ^2.0.2+1
   flutter_riverpod: ^2.4.9
   riverpod_annotation: ^2.3.3
+  badges: ^3.1.2
 
 dev_dependencies:
   flutter_test:

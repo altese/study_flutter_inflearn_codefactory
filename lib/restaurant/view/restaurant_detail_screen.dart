@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:inflearn_code_factory/common/const/colors.dart';
 import 'package:inflearn_code_factory/common/layout/default_layout.dart';
 import 'package:inflearn_code_factory/common/model/cursor_pagination_model.dart';
 import 'package:inflearn_code_factory/common/utils/pagination_utils.dart';
 import 'package:inflearn_code_factory/product/component/product_card.dart';
+import 'package:inflearn_code_factory/product/model/product_model.dart';
 import 'package:inflearn_code_factory/rating/component/rating_card.dart';
 import 'package:inflearn_code_factory/rating/model/rating_model.dart';
 import 'package:inflearn_code_factory/restaurant/component/restaurant_card.dart';
@@ -11,6 +13,7 @@ import 'package:inflearn_code_factory/restaurant/model/restaurant_detail_model.d
 import 'package:inflearn_code_factory/restaurant/model/restaurant_model.dart';
 import 'package:inflearn_code_factory/restaurant/provider/restaurant_provider.dart';
 import 'package:inflearn_code_factory/restaurant/provider/restaurant_rating_provider.dart';
+import 'package:inflearn_code_factory/user/provider/basket_provider.dart';
 import 'package:skeletons/skeletons.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
@@ -48,6 +51,7 @@ class _RestaurantDetailScreenState
   Widget build(BuildContext context) {
     final state = ref.watch(restaurantDetailProvider(widget.id));
     final ratingsState = ref.watch(restaurantRatingProvider(widget.id));
+    final basket = ref.watch(basketProvider);
 
     if (state == null) {
       return const DefaultLayout(
@@ -57,6 +61,20 @@ class _RestaurantDetailScreenState
 
     return DefaultLayout(
       title: '떡볶이',
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: PRIMARY_COLOR,
+        child: Badge(
+          backgroundColor: Colors.white,
+          isLabelVisible: basket.isNotEmpty,
+          label: Text(
+            basket
+                .fold<int>(0, (previous, next) => previous + next.count)
+                .toString(),
+          ),
+          child: const Icon(Icons.shopping_basket_outlined),
+        ),
+      ),
       child: CustomScrollView(
         controller: controller,
         slivers: [
@@ -64,7 +82,7 @@ class _RestaurantDetailScreenState
           if (state is! RestaurantDetailModel) renderLoading(),
           if (state is RestaurantDetailModel) renderLabel(),
           if (state is RestaurantDetailModel)
-            renderProducts(products: state.products),
+            renderProducts(products: state.products, restaurant: state),
           if (ratingsState is CursorPaginationModel<RatingModel>)
             renderRatings(models: ratingsState.data),
         ],
@@ -136,6 +154,7 @@ class _RestaurantDetailScreenState
   }
 
   SliverPadding renderProducts({
+    required RestaurantModel restaurant,
     required List<RestaurantProductModel> products,
   }) {
     return SliverPadding(
@@ -145,9 +164,23 @@ class _RestaurantDetailScreenState
           (context, index) {
             final model = products[index];
 
-            return Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: ProductCard.fromRestaurantProductModel(model: model),
+            return InkWell(
+              onTap: () {
+                ref.read(basketProvider.notifier).addToBasket(
+                      product: ProductModel(
+                        id: model.id,
+                        name: model.name,
+                        imgUrl: model.imgUrl,
+                        detail: model.detail,
+                        price: model.price,
+                        restaurant: restaurant,
+                      ),
+                    );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: ProductCard.fromRestaurantProductModel(model: model),
+              ),
             );
           },
           childCount: products.length,
